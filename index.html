@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Rent Wheels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.5);
+        }
+
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 40px 30px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 0.7s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-container h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            color: #e60000;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #444;
+            text-transform: capitalize;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fff;
+        }
+
+        .form-group input:focus {
+            border-color: #e60000;
+            outline: none;
+            box-shadow: 0 0 10px rgba(230, 0, 0, 0.5);
+        }
+
+        .form-group .error-message {
+            color: #d00000;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 15px;
+            background-color: #e60000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #c40000;
+            transform: translateY(-2px);
+        }
+
+        .form-group button:active {
+            transform: translateY(1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .login-link a {
+            color: #e60000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #c40000;
+            text-decoration: underline;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: lighter;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .eye-icon i {
+            font-size: 1.5rem;
+            color: #444;
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .form-container h2 {
+                font-size: 2rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="car-renting-garage.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Form Container -->
+  <div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" />
+        <div id="usernameError" class="error-message">Please enter a username.</div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <div style="position: relative;">
+            <input type="password" id="password" name="password" />
+            <span class="eye-icon" onclick="togglePassword()">
+                <i id="eye-icon" class="fa fa-eye"></i>
+            </span>
+        </div>
+        <div id="passwordError" class="error-message">
+          Password must be at least 8 characters, include uppercase, lowercase, number, and special character.
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit">Login</button>
+      </div>
+    </form>
+    <div class="login-link">
+      <p>Don't have an account? <a href="signU[.html">Create Account</a></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    &copy; 2025 Rent Wheels. All rights reserved.
+  </div>
+
+  <!-- Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  <script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye");
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      const usernameError = document.getElementById('usernameError');
+      const passwordError = document.getElementById('passwordError');
+
+      usernameError.style.display = 'none';
+      passwordError.style.display = 'none';
+
+      let isValid = true;
+
+      // Password pattern
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+      // Check if username is empty
+      if (!username) {
+        usernameError.style.display = 'block';
+        isValid = false;
+      }
+
+      // Check if password is valid
+      if (!passwordPattern.test(password)) {
+        passwordError.style.display = 'block';
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Here you would typically check credentials against a database
+        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = storedUsers.find(user => user.username === username && user.password === password);
+
+        if (user) {
+          localStorage.setItem('isLoggedIn', 'true'); // Set login status
+          window.location.href = 'dashboard.html'; // Redirect to dashboard
+        } else {
+          const loginErrorMessage = "Invalid username or password. Please try again.";
+          usernameError.innerText = loginErrorMessage;
+          passwordError.innerText = loginErrorMessage;
+          usernameError.style.display = 'block';
+          passwordError.style.display = 'block';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

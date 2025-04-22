@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hire a Driver - Rent Wheels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+ /* Navbar Styles */
+ .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 15px 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 75px;
+            width: 100%;
+        }
+
+        .navbar .logo {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff5722;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #444;
+            list-style: none;
+            padding: 10px 0;
+            margin: 0;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 200px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+            width: 100%;
+        }
+
+        .dropdown-menu a {
+            padding: 10px 20px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1002;
+            transition: transform 0.3s ease;
+            color: white;
+        }
+
+        .hamburger.active {
+            transform: rotate(90deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 23px;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 50%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: #333;
+                flex-direction: column;
+                padding: 80px 20px 20px;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+                transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                z-index: 999;
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                transform: translateX(100%);
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                padding: 12px 20px;
+            }
+
+            /* Mobile Dropdown Menu */
+            .dropdown-menu {
+                position: static;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.2);
+                box-shadow: none;
+                display: none;
+                opacity: 1;
+                transform: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease, padding 0.3s ease;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+                max-height: 500px;
+                padding: 10px 0;
+            }
+
+            .dropdown > a::after {
+                content: '\f078';
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                margin-left: 8px;
+                transition: transform 0.3s ease;
+            }
+
+            .dropdown.active > a::after {
+                transform: rotate(180deg);
+            }
+
+            /* Close Button */
+            .close-btn-container {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                display: block;
+            }
+
+            .close-btn {
+                font-size: 24px;
+                cursor: pointer;
+                color: white;
+                transition: color 0.3s ease;
+            }
+
+            .close-btn:hover {
+                color: #ff5722;
+            }
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        /* Form Container */
+        .form-container {
+            background: #fff;
+            padding: 29px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .form-container h2 {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-container p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 1rem;
+            color: #555;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #ff5b29;
+            outline: none;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #ff5b29;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #e64a19;
+            transform: translateY(-3px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        #back {
+            width: 70%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #ff5b29;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 60px;
+        }
+
+        #back:hover {
+            background: #e64a19;
+            transform: translateY(-3px);
+        }
+
+        /* Alert Popup */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 40px;
+            right: 20px;
+            background: #4caf50;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .alert.show {
+            display: block;
+            animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+
+      /* Footer */
+.footer {
+    background: linear-gradient(145deg, rgba(51, 51, 51, 0.9), rgba(34, 34, 34, 0.9));
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    margin-top: 50px;
+    font-family: 'Arial', sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    margin-bottom: 20px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ff5722;
+    position: relative;
+    display: inline-block;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 50%;
+    height: 2px;
+    background: #ff5722;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.footer-section h3:hover::after {
+    transform: scaleX(1);
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.footer-section ul li a:hover {
+    color: #ff5722;
+    transform: translateX(10px);
+}
+
+.footer-section .socials {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-section .socials li {
+    margin: 0;
+}
+
+.footer-section .socials a {
+    color: white;
+    font-size: 24px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.footer-section .socials a:hover {
+    color: #ff5722;
+    transform: translateY(-5px) scale(1.2);
+}
+
+.footer-bottom {
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.footer-bottom a {
+    color: #ff5722;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom a:hover {
+    color: #ff8a65;
+}
+
+/* Custom Icons for Social Media */
+.footer-section .socials a[href*="facebook.com"]::before {
+    content: '📘';
+}
+
+.footer-section .socials a[href*="twitter.com"]::before {
+    content: '🐦';
+}
+
+.footer-section .socials a[href*="instagram.com"]::before {
+    content: '📸';
+}
+
+.footer-section .socials a[href*="linkedin.com"]::before {
+    content: '🔗';
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer {
+        padding: 40px 10px;
+        width: 122.5%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin-bottom: 30px;
+    }
+
+    .footer-section .socials {
+        gap: 25px;
+    }
+}
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 15px;
+            }
+
+            .form-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-container p {
+                font-size: 0.9rem;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .submit-btn,
+            #back {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+
+            footer p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container h2 {
+                font-size: 1.25rem;
+            }
+
+            .form-container p {
+                font-size: 0.8rem;
+            }
+
+            .form-group label {
+                font-size: 0.8rem;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+
+            .submit-btn,
+            #back {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+
+            footer p {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="dashboard.html">  <img src="logo.png" alt="Rent Wheels Logo" class="logo" width="90"></a>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <!-- Cross button placeholder -->
+            <li class="close-btn-container" id="close-btn-container"></li>
+            <!-- Menu items -->
+            <li><a href="dashboard.html">Home</a></li>
+            <li class="dropdown">
+                <a href="dashboard.html#car-images">Vehicles <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="dashboard.html#car-images">Luxury Cars</a></li>
+                    <li><a href="dashboard.html#car-images">Bullet Proof</a></li>
+                    <li><a href="dashboard.html#car-images">Cars</a></li>
+                </ul>
+            </li>
+            <li><a href="dashboard.html#booking-form">Instant Quote</a></li>
+            <li><a href="booking.html">Book Online</a></li>
+            <li><a href="service.html">Services</a></li>
+            <li><a href="dashboard.html#about-us">About Us</a></li>
+            <li><a href="foot">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Form Container -->
+        <div class="form-container">
+            <h2>Hire a Driver</h2>
+            <p>Fill out the form below to hire a permanent driver.</p>
+            <form id="driver-form">
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter driver's full name" required>
+                </div>
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" placeholder="Enter driver's age" required>
+                </div>
+
+                <!-- Contact -->
+                <div class="form-group">
+                    <label for="contact">Contact Number:</label>
+                    <input type="tel" id="contact" name="contact" placeholder="Enter driver's contact number" required>
+                </div>
+
+                <!-- Experience -->
+                <div class="form-group">
+                    <label for="experience">Driving Experience (in years):</label>
+                    <input type="number" id="experience" name="experience" placeholder="Enter driving experience" required>
+                </div>
+
+                <!-- License Number -->
+                <div class="form-group">
+                    <label for="license">License Number:</label>
+                    <input type="text" id="license" name="license" placeholder="Enter driver's license number" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">Hire Driver</button>
+                <a href="index.html" id="back">Go Back</a>
+            </form>
+        </div>
+
+        <!-- Alert Popup -->
+        <div id="alert" class="alert">Driver information submitted successfully!</div>
+    </main>
+
+        <!-- Footer -->
+        <footer class="footer" id="foot">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#car-images">Vehicles</a></li>
+                        <li><a href="service.html" target="_parent">Services</a></li>
+                        <li><a href="#about-us">About Us</a></li>
+                        <li><a href="#foot">Contact Us</a></li>
+                        <li><a href="booking.html">Book Online</a></li>
+                        <li><a href="#booking-form">Instant Quote</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <ul class="socials">
+                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> &nbsp;rentwheels45@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> &nbsp;0324-6173885</li>
+                        <li><i class="fas fa-map-marker-alt"></i> &nbsp;Model Town, Gujrat</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 Car Rental. All rights reserved.
+            </div>
+        </footer>
+
+    <!-- JavaScript -->
+    <script>
+         // Form Submission Handling
+         const form = document.getElementById('driver-form');
+        const alertPopup = document.getElementById('alert');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Show the alert popup
+            alertPopup.classList.add('show');
+
+            // Reset the form
+            form.reset();
+
+            // Hide the alert after 3 seconds
+            setTimeout(() => {
+                alertPopup.classList.remove('show');
+            }, 3000);
+        });
+        // Mobile Menu Functionality
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const closeBtn = document.getElementById('closeBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        // Toggle mobile menu
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Toggle dropdown menus on mobile
+        function toggleDropdown(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = e.currentTarget.closest('.dropdown');
+                dropdown.classList.toggle('active');
+            }
+        }
+
+        // Event Listeners
+        hamburger.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+
+        // Add click event to dropdown triggers
+        document.querySelectorAll('.dropdown > a').forEach(link => {
+            link.addEventListener('click', toggleDropdown);
+        });
+
+        // Close menu when clicking on a link (except dropdown triggers)
+        document.querySelectorAll('.nav-links a:not(.dropdown > a)').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+                if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
